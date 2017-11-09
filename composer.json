@@ -1,5 +1,5 @@
 {
-  "name": "the-shop/fortytwo-yoda",
+  "name": "the-shop/fortytwo-terminal",
   "description": "Terminal application implementation using the-shop/fortytwo-* packages",
   "license": "MIT",
   "type": "library",
