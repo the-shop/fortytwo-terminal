@@ -2,7 +2,7 @@
 
 namespace Framework\Terminal\Test;
 
-use Framework\Terminal\Commands\Cron\CronJob;
+use Framework\Terminal\Cron\CronJob;
 
 class TestJob extends CronJob
 {

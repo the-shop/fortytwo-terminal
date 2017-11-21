@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Terminal\Commands\Cron;
+namespace Framework\Terminal\Cron;
 
 use Framework\Base\Application\ApplicationAwareInterface;
 
@@ -20,7 +20,7 @@ interface CronJobInterface extends ApplicationAwareInterface
     /**
      * @param string $expression
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return \Framework\Terminal\Cron\CronJobInterface
      */
     public function setCronTimeExpression(string $expression): CronJobInterface;
 
@@ -37,7 +37,7 @@ interface CronJobInterface extends ApplicationAwareInterface
     /**
      * @param array $args
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return \Framework\Terminal\Cron\CronJobInterface
      */
     public function setArgs(array $args): CronJobInterface;
 

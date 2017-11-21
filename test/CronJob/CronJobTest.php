@@ -1,16 +1,16 @@
 <?php
 
-namespace Framework\Terminal\Test\Commands;
+namespace Framework\Terminal\Test\CronJob;
 
 use Framework\Base\Application\ApplicationInterface;
-use Framework\Terminal\Commands\Cron\CronJobInterface;
+use Framework\Terminal\Cron\CronJobInterface;
 use Framework\Terminal\Router\Dispatcher;
-use Framework\Base\Test\UnitTest;
 use Framework\Terminal\Test\TestJob;
+use Framework\Terminal\Test\UnitTest;
 
 /**
  * Class CronJobTest
- * @package Framework\Base\Test\Terminal\Commands
+ * @package Framework\Terminal\Test\CronJob
  */
 class CronJobTest extends UnitTest
 {
@@ -19,7 +19,7 @@ class CronJobTest extends UnitTest
      */
     private $routes = [
         'test' => [
-            'handler' => DummyCommand::class,
+            'handler' => UnitTest::class,
             'requiredParams' => [
                 'testParam',
                 'testParam2',
@@ -60,6 +60,7 @@ class CronJobTest extends UnitTest
      * Test cron jobs params being set correctly
      *
      * @depends testAddCronJob
+     * @param \Framework\Base\Application\ApplicationInterface $app
      */
     public function testCronJobSetters(ApplicationInterface $app)
     {

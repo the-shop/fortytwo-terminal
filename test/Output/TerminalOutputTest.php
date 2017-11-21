@@ -2,11 +2,11 @@
 
 namespace Framework\Terminal\Test\Output;
 
+use Framework\Terminal\Response\Response;
+use Framework\Terminal\Test\UnitTest;
 use InvalidArgumentException;
 use Framework\Terminal\Output\ColorFormatter;
 use Framework\Terminal\Output\TerminalOutput;
-use Framework\Base\Test\UnitTest;
-use Framework\Http\Response\Response;
 
 /**
  * Class TerminalOutputTest
@@ -30,7 +30,6 @@ class TerminalOutputTest extends UnitTest
 
     /**
      * Test output message on status code 200
-     * @todo lose 42 - Http dependency
      */
     public function testTerminalOutputMessage()
     {
@@ -75,7 +74,6 @@ class TerminalOutputTest extends UnitTest
 
     /**
      * Test output message on exception
-     * @todo lose 42 - Http dependency
      */
     public function testTerminalOutputMessageException()
     {

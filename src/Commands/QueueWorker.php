@@ -14,6 +14,8 @@ class QueueWorker implements CommandHandlerInterface
     use ApplicationAwareTrait;
 
     /**
+     * @param array $parameterValues
+     *
      * @return $this|string
      */
     public function run(array $parameterValues = [])

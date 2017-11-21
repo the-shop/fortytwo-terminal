@@ -2,10 +2,9 @@
 
 namespace Framework\Terminal\Test\Dispatcher;
 
+use Framework\Terminal\Request\Request;
 use Framework\Terminal\Router\Dispatcher;
-use Framework\Terminal\Test\Commands\DummyCommand;
-use Framework\Base\Test\UnitTest;
-use Framework\Http\Request\Request;
+use Framework\Terminal\Test\UnitTest;
 
 /**
  * Class DispatcherTest
@@ -18,7 +17,7 @@ class DispatcherTest extends UnitTest
      */
     private $routes = [
         'test' => [
-            'handler' => DummyCommand::class,
+            'handler' => UnitTest::class,
             'requiredParams' => [
                 'testParam',
                 'testParam2',
@@ -32,7 +31,6 @@ class DispatcherTest extends UnitTest
 
     /**
      * Test dispatcher parse request - no command name registered - exception
-     * @todo lose 42 - Http dependency
      */
     public function testDispatcherParseRequestCommandNameNotRegistered()
     {
@@ -61,7 +59,6 @@ class DispatcherTest extends UnitTest
 
     /**
      * Test dispatcher parse request - invalid required param - exception
-     * @todo lose 42 - Http dependency
      */
     public function testDispatcherParseRequestInvalidRequiredParams()
     {
@@ -91,7 +88,6 @@ class DispatcherTest extends UnitTest
 
     /**
      * Test dispatcher parse request - invalid optional params - exception
-     * @todo lose 42 - Http dependency
      */
     public function testDispatcherParseRequestInvalidOptionalParams()
     {
@@ -121,7 +117,6 @@ class DispatcherTest extends UnitTest
 
     /**
      * Test dispatcher parse request - success
-     * @todo lose 42 - Http dependency
      */
     public function testDispatcherParseRequestSuccess()
     {
@@ -155,7 +150,7 @@ class DispatcherTest extends UnitTest
             $dispatcher->getRouteParameters()
         );
         $this->assertEquals(
-            DummyCommand::class,
+            UnitTest::class,
             $dispatcher->getHandler()
         );
     }

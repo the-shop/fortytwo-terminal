@@ -11,8 +11,7 @@ Install
 
 **OR**
 
-`composer require the-shop/fortytwo-yoda`
+`composer require the-shop/fortytwo-terminal`
 
 3rd party dependencies
 ---
-`php-amqplib/php-amqplib`

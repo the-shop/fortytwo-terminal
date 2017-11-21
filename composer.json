@@ -11,10 +11,7 @@
     }
   ],
   "require": {
-    "the-shop/fortytwo-base": "0.1.0",
-    "the-shop/fortytwo-http": "0.1.0",
-    "the-shop/fortytwo-restapi": "0.1.0",
-    "php-amqplib/php-amqplib": "^2.7"
+    "the-shop/fortytwo-base": "^0.1.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.3",
@@ -28,7 +25,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Framework\\Terminal\\Test\\": "test/"
+      "Framework\\Terminal\\Test\\": "test/",
+      "Framework\\Base\\Test\\": "vendor/the-shop/fortytwo-base/test/"
     }
   },
   "scripts": {

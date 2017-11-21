@@ -3,7 +3,7 @@
 namespace Framework\Terminal\Test\Output;
 
 use Framework\Terminal\Output\ColorFormatter;
-use Framework\Base\Test\UnitTest;
+use Framework\Terminal\Test\UnitTest;
 
 /**
  * Class ColorFormatterTest

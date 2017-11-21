@@ -5,20 +5,32 @@ namespace Framework\Terminal;
 use Framework\Base\Application\ApplicationConfiguration;
 use Framework\Base\Application\BaseApplication;
 use Framework\Terminal\Output\TerminalOutput;
+use Framework\Terminal\Request\Request;
+use Framework\Terminal\Response\Response;
 use Framework\Terminal\Router\Dispatcher;
-use Framework\Http\Request\Request;
-use Framework\Http\Response\Response;
+use Framework\Terminal\Cron\CronJobInterface;
 
 /**
- * Class TerminalApp
- * @package Framework\Base\TerminalApp
+ * Class TerminalApplication
+ * @package Framework\Terminal
  */
-class Yoda extends BaseApplication
+class TerminalApplication extends BaseApplication implements TerminalInterface
 {
     /**
-     * TerminalApp constructor.
+     * @var CronJobInterface[]
+     */
+    protected $registeredCronJobs = [];
+
+    /**
+     * Register Seeders in here
+     * @var array
+     */
+    private $seeders = [];
+
+    /**
+     * TerminalApplication constructor.
+     *
      * @param ApplicationConfiguration|null $applicationConfiguration
-     * @todo lose 42 - Http dependency
      */
     public function __construct(ApplicationConfiguration $applicationConfiguration = null)
     {
@@ -55,7 +67,6 @@ class Yoda extends BaseApplication
 
     /**
      * @inheritdoc
-     * @todo lose 42 - Http dependency
      */
     public function buildRequest()
     {
@@ -65,5 +76,45 @@ class Yoda extends BaseApplication
         $this->setRequest($request);
 
         return $request;
+    }
+
+    /**
+     * @return CronJobInterface[]|[]
+     */
+    public function getRegisteredCronJobs(): array
+    {
+        return $this->registeredCronJobs;
+    }
+
+    /**
+     * @param \Framework\Terminal\Cron\CronJobInterface $cronJob
+     *
+     * @return \Framework\Terminal\TerminalInterface
+     */
+    public function registerCronJob(CronJobInterface $cronJob): TerminalInterface
+    {
+        $this->registeredCronJobs[] = $cronJob;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRegisteredSeeders(): array
+    {
+        return $this->seeders;
+    }
+
+    /**
+     * @param string $seederName
+     * @param string $fullyQualifiedClassPath
+     * @return \Framework\Terminal\TerminalInterface
+     */
+    public function registerSeeder(string $seederName, string $fullyQualifiedClassPath): TerminalInterface
+    {
+        $this->seeders[$seederName] = $fullyQualifiedClassPath;
+
+        return $this;
     }
 }

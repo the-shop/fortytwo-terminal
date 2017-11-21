@@ -3,8 +3,8 @@
 namespace Framework\Terminal\Test\Input;
 
 use Framework\Terminal\Input\TerminalInput;
-use Framework\Base\Test\UnitTest;
-use Framework\Http\Request\Request;
+use Framework\Terminal\Request\Request;
+use Framework\Terminal\Test\UnitTest;
 
 /**
  * Class TerminalInputTest
@@ -14,7 +14,6 @@ class TerminalInputTest extends UnitTest
 {
     /**
      * Test CLI input handler - success
-     * @todo lose 42 - Http dependency
      */
     public function testTerminalInputParameters()
     {
@@ -47,7 +46,6 @@ class TerminalInputTest extends UnitTest
 
     /**
      * Test CLI input handler - throw exception - wrong param missing value
-     * @todo lose 42 - Http dependency
      */
     public function testTerminalInputParametersWrongParamNoValue()
     {
@@ -75,7 +73,6 @@ class TerminalInputTest extends UnitTest
 
     /**
      * Test CLI input handler - throw exception - param missing key
-     * @todo lose 42 - Http dependency
      */
     public function testTerminalInputParametersWrongParamNoKey()
     {
@@ -103,7 +100,6 @@ class TerminalInputTest extends UnitTest
 
     /**
      * Test CLI input handler - throw exception - param missing key
-     * @todo lose 42 - Http dependency
      */
     public function testTerminalInputParametersWrongParamNoKeyAndNoValue()
     {

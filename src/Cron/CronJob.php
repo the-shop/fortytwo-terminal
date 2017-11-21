@@ -1,12 +1,12 @@
 <?php
 
-namespace Framework\Terminal\Commands\Cron;
+namespace Framework\Terminal\Cron;
 
 use Framework\Base\Application\ApplicationAwareTrait;
 
 /**
- * Class CronJobsHandler
- * @package Framework\Base\Terminal\Commands\Cron
+ * Class CronJob
+ * @package Framework\Terminal\Cron
  */
 abstract class CronJob implements CronJobInterface
 {
@@ -53,7 +53,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * @param array $args
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function setArgs(array $args): CronJobInterface
     {
@@ -74,7 +74,7 @@ abstract class CronJob implements CronJobInterface
      * Set the cronTimeExpression expression for the event.
      * @param string $expression
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function setCronTimeExpression(string $expression): CronJobInterface
     {
@@ -107,7 +107,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run hourly.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function hourly()
     {
@@ -117,7 +117,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run daily.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function daily()
     {
@@ -129,7 +129,7 @@ abstract class CronJob implements CronJobInterface
      *
      * @param  string  $time
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function at($time)
     {
@@ -141,7 +141,7 @@ abstract class CronJob implements CronJobInterface
      *
      * @param  string  $time
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function dailyAt($time)
     {
@@ -157,7 +157,7 @@ abstract class CronJob implements CronJobInterface
      * @param  int  $first
      * @param  int  $second
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function twiceDaily($first = 1, $second = 13)
     {
@@ -170,7 +170,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run only on weekdays.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function weekdays()
     {
@@ -180,7 +180,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run only on Mondays.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function mondays()
     {
@@ -190,7 +190,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run only on Tuesdays.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function tuesdays()
     {
@@ -200,7 +200,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run only on Wednesdays.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function wednesdays()
     {
@@ -210,7 +210,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run only on Thursdays.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function thursdays()
     {
@@ -220,7 +220,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run only on Fridays.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function fridays()
     {
@@ -230,7 +230,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run only on Saturdays.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function saturdays()
     {
@@ -240,7 +240,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run only on Sundays.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function sundays()
     {
@@ -250,7 +250,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run weekly.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function weekly()
     {
@@ -263,7 +263,7 @@ abstract class CronJob implements CronJobInterface
      * @param  int  $day
      * @param  string  $time
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function weeklyOn($day, $time = '0:0')
     {
@@ -275,7 +275,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run monthly.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function monthly()
     {
@@ -288,7 +288,7 @@ abstract class CronJob implements CronJobInterface
      * @param int  $day
      * @param string  $time
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function monthlyOn($day = 1, $time = '0:0')
     {
@@ -300,7 +300,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run quarterly.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function quarterly()
     {
@@ -310,7 +310,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run yearly.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function yearly()
     {
@@ -320,7 +320,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run every minute.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function everyMinute()
     {
@@ -330,7 +330,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run every five minutes.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function everyFiveMinutes()
     {
@@ -340,7 +340,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run every ten minutes.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function everyTenMinutes()
     {
@@ -350,7 +350,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run every thirty minutes.
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function everyThirtyMinutes()
     {
@@ -362,7 +362,7 @@ abstract class CronJob implements CronJobInterface
      *
      * @param  array|mixed  $days
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function days($days)
     {
@@ -377,7 +377,7 @@ abstract class CronJob implements CronJobInterface
      * @param  int  $position
      * @param  string  $value
      *
-     * @return \Framework\Terminal\Commands\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     protected function spliceIntoPosition($position, $value)
     {

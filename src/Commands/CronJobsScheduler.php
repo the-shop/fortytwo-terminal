@@ -5,8 +5,8 @@ namespace Framework\Terminal\Commands;
 use Framework\Base\Application\ApplicationAwareTrait;
 
 /**
- * Class CronJob
- * @package Framework\Base\Terminal\Commands\Cron
+ * Class CronJobsScheduler
+ * @package Framework\Terminal\Commands
  */
 class CronJobsScheduler implements CommandHandlerInterface
 {
@@ -22,6 +22,8 @@ class CronJobsScheduler implements CommandHandlerInterface
 
     /**
      * Run registered cron jobs
+     *
+     * @param array $parameterValues
      *
      * @return array
      */
@@ -53,7 +55,7 @@ class CronJobsScheduler implements CommandHandlerInterface
      * Parse cron expression and compare it to current time return true if cron job needs to run
      * or return false if cron job expression doesn't match current time
      * @param $currentTime
-     * @param $cronTab
+     * @param $cronTime
      * @return mixed
      */
     private function parseCronExpression($currentTime, $cronTime)
