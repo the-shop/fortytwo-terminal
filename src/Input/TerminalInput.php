@@ -12,6 +12,7 @@ use Framework\Base\Request\RequestInterface;
 class TerminalInput implements TerminalInputInterface
 {
     const REQUIRED_ARG = 'required_argument';
+
     const OPTIONAL_ARG = 'optional_argument';
 
     use ApplicationAwareTrait;
@@ -27,7 +28,10 @@ class TerminalInput implements TerminalInputInterface
 
     /**
      * TerminalInput constructor.
+     *
      * @param RequestInterface $request
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(RequestInterface $request)
     {
@@ -39,8 +43,20 @@ class TerminalInput implements TerminalInputInterface
             throw new \InvalidArgumentException('No arguments passed.', 403);
         }
 
-        $this->setInputCommand(array_shift($arguments));
-        $this->setInputParameters($arguments);
+        $this->setInputCommand(array_shift($arguments))
+             ->setInputParameters($arguments);
+    }
+
+    /**
+     * @param string $commandName
+     *
+     * @return TerminalInputInterface
+     */
+    public function setInputCommand(string $commandName): TerminalInputInterface
+    {
+        $this->commandName = $commandName;
+
+        return $this;
     }
 
     /**
@@ -48,10 +64,12 @@ class TerminalInput implements TerminalInputInterface
      * If input argument is surrounded with brackets "[]", it will be considered as optional
      * parameter.
      * All other parameters, without equality symbol will not be validated and will be ignored.
+     *
      * @param array $arguments
-     * @return $this
+     *
+     * @return TerminalInputInterface
      */
-    public function setInputParameters(array $arguments = [])
+    public function setInputParameters(array $arguments = []): TerminalInputInterface
     {
         $requiredParams = [];
         $optionalParams = [];
@@ -66,7 +84,7 @@ class TerminalInput implements TerminalInputInterface
             }
             // Set optional parameter
             if (substr($argument, 0, strlen('[')) === '['
-                && substr($argument, -1) === ']'
+                && substr($argument, - 1) === ']'
                 && stripos($argument, '=') !== false
             ) {
                 $formattedParam = $this->formatInputArgument($argument, self::OPTIONAL_ARG);
@@ -81,38 +99,13 @@ class TerminalInput implements TerminalInputInterface
     }
 
     /**
-     * @return array
-     */
-    public function getInputParameters()
-    {
-        return $this->parameters;
-    }
-
-    /**
-     * @param string $commandName
-     * @return $this
-     */
-    public function setInputCommand(string $commandName)
-    {
-        $this->commandName = $commandName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInputCommand()
-    {
-        return $this->commandName;
-    }
-
-    /**
      * @param $argument
      * @param $argumentType
+     *
      * @return array
+     * @throws \InvalidArgumentException
      */
-    private function formatInputArgument($argument, $argumentType)
+    private function formatInputArgument($argument, $argumentType): array
     {
         $argParts = [];
 
@@ -146,5 +139,21 @@ class TerminalInput implements TerminalInputInterface
         }
 
         return $formattedParameter;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInputParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInputCommand(): string
+    {
+        return $this->commandName;
     }
 }

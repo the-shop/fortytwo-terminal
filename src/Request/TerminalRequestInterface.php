@@ -18,7 +18,7 @@ interface TerminalRequestInterface extends RequestInterface
     /**
      * @param string $method
      *
-     * @return \Framework\Terminal\Request\TerminalRequestInterface
+     * @return TerminalRequestInterface
      */
     public function setMethod(string $method): TerminalRequestInterface;
 
@@ -30,7 +30,7 @@ interface TerminalRequestInterface extends RequestInterface
     /**
      * @param array $serverInfo
      *
-     * @return \Framework\Terminal\Request\TerminalRequestInterface
+     * @return TerminalRequestInterface
      */
     public function setServer(array $serverInfo): TerminalRequestInterface;
 }

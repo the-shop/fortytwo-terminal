@@ -28,10 +28,11 @@ class UnitTest extends TestCase
     }
 
     /**
-     * @param $testParam
-     * @param $testParam2
+     * @param      $testParam
+     * @param      $testParam2
      * @param null $optionalParam
      * @param null $optionalParam2
+     *
      * @return string
      */
     public function handle($testParam, $testParam2, $optionalParam = null, $optionalParam2 = null)

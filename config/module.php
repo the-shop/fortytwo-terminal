@@ -1,12 +1,12 @@
 <?php
 
-use Framework\Terminal\Commands\QueueWorker;
-use Framework\Terminal\Commands\DatabaseSeedersHandler;
-use Framework\Terminal\Commands\CronJobsScheduler;
-use Framework\Terminal\Listeners\ExceptionFormatter;
-use Framework\Terminal\Listeners\ResponseFormatter;
 use Framework\Base\Application\BaseApplication;
 use Framework\Base\Application\Exception\ExceptionHandler;
+use Framework\Terminal\Commands\CronJobsScheduler;
+use Framework\Terminal\Commands\DatabaseSeedersHandler;
+use Framework\Terminal\Commands\QueueWorker;
+use Framework\Terminal\Listeners\ExceptionFormatter;
+use Framework\Terminal\Listeners\ResponseFormatter;
 
 return [
     'commands' => [

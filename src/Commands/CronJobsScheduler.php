@@ -13,14 +13,6 @@ class CronJobsScheduler implements CommandHandlerInterface
     use ApplicationAwareTrait;
 
     /**
-     * @return array
-     */
-    public function getRegisteredJobs(): array
-    {
-        return $this->getApplication()->getRegisteredCronJobs();
-    }
-
-    /**
      * Run registered cron jobs
      *
      * @param array $parameterValues
@@ -35,9 +27,9 @@ class CronJobsScheduler implements CommandHandlerInterface
 
         foreach ($cronJobs as $job) {
             if ($this->parseCronExpression(
-                $currentTime,
-                $job->getCronTimeExpression()
-            ) === true) {
+                    $currentTime,
+                    $job->getCronTimeExpression()
+                ) === true) {
                 $job->setApplication($this->getApplication());
                 $output = $job->execute();
 
@@ -52,10 +44,21 @@ class CronJobsScheduler implements CommandHandlerInterface
     }
 
     /**
+     * @return array
+     */
+    public function getRegisteredJobs(): array
+    {
+        return $this->getApplication()
+                    ->getRegisteredCronJobs();
+    }
+
+    /**
      * Parse cron expression and compare it to current time return true if cron job needs to run
      * or return false if cron job expression doesn't match current time
+     *
      * @param $currentTime
      * @param $cronTime
+     *
      * @return mixed
      */
     private function parseCronExpression($currentTime, $cronTime)
@@ -74,7 +77,7 @@ class CronJobsScheduler implements CommandHandlerInterface
             foreach ($v as &$v1) {
                 // Do preg_replace with regular expression to create evaluations from cronTab
                 $v1 = preg_replace(
-                    // Regex
+                // Regex
                     [
                         // *
                         '/^\*$/',

@@ -51,6 +51,14 @@ abstract class CronJob implements CronJobInterface
     }
 
     /**
+     * @return array
+     */
+    public function getArgs(): array
+    {
+        return $this->args;
+    }
+
+    /**
      * @param array $args
      *
      * @return CronJobInterface
@@ -63,15 +71,17 @@ abstract class CronJob implements CronJobInterface
     }
 
     /**
-     * @return array
+     * Get the cronTimeExpression expression for the event.
+     * @return string
      */
-    public function getArgs(): array
+    public function getCronTimeExpression(): string
     {
-        return $this->args;
+        return $this->cronTimeExpression;
     }
 
     /**
      * Set the cronTimeExpression expression for the event.
+     *
      * @param string $expression
      *
      * @return CronJobInterface
@@ -84,21 +94,17 @@ abstract class CronJob implements CronJobInterface
     }
 
     /**
-     * Get the cronTimeExpression expression for the event.
+     * @param $input
      *
-     * @return string
+     * @return int
+     * @throws \InvalidArgumentException
      */
-    public function getCronTimeExpression(): string
-    {
-        return $this->cronTimeExpression;
-    }
-
-    public function formatUnixTimeStamp($input)
+    public function formatUnixTimeStamp($input): int
     {
         if (strlen((string)$input) === 10) {
             return (int)$input;
         } elseif (strlen((string)$input) === 13) {
-            return (int)substr((string)$input, 0, -3);
+            return (int)substr((string)$input, 0, - 3);
         }
 
         throw new \InvalidArgumentException('Unrecognized unix timestamp format');
@@ -106,7 +112,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run hourly.
-     *
      * @return CronJobInterface
      */
     public function hourly()
@@ -116,7 +121,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run daily.
-     *
      * @return CronJobInterface
      */
     public function daily()
@@ -127,7 +131,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the command at a given time.
      *
-     * @param  string  $time
+     * @param  string $time
      *
      * @return CronJobInterface
      */
@@ -139,7 +143,7 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run daily at a given time (10:00, 19:30, etc).
      *
-     * @param  string  $time
+     * @param  string $time
      *
      * @return CronJobInterface
      */
@@ -147,21 +151,38 @@ abstract class CronJob implements CronJobInterface
     {
         $segments = explode(':', $time);
 
-        return $this->spliceIntoPosition(2, (int) $segments[0])
-                    ->spliceIntoPosition(1, count($segments) == 2 ? (int) $segments[1] : '0');
+        return $this->spliceIntoPosition(2, (int)$segments[0])
+                    ->spliceIntoPosition(1, count($segments) == 2 ? (int)$segments[1] : '0');
+    }
+
+    /**
+     * Splice the given value into the given position of the expression.
+     *
+     * @param  int    $position
+     * @param  string $value
+     *
+     * @return CronJobInterface
+     */
+    protected function spliceIntoPosition($position, $value)
+    {
+        $segments = explode(' ', $this->cronTimeExpression);
+
+        $segments[$position - 1] = $value;
+
+        return $this->setCronTimeExpression(implode(' ', $segments));
     }
 
     /**
      * Schedule the event to run twice daily.
      *
-     * @param  int  $first
-     * @param  int  $second
+     * @param  int $first
+     * @param  int $second
      *
      * @return CronJobInterface
      */
     public function twiceDaily($first = 1, $second = 13)
     {
-        $hours = $first.','.$second;
+        $hours = $first . ',' . $second;
 
         return $this->spliceIntoPosition(1, 0)
                     ->spliceIntoPosition(2, $hours);
@@ -169,7 +190,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run only on weekdays.
-     *
      * @return CronJobInterface
      */
     public function weekdays()
@@ -179,7 +199,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run only on Mondays.
-     *
      * @return CronJobInterface
      */
     public function mondays()
@@ -188,8 +207,21 @@ abstract class CronJob implements CronJobInterface
     }
 
     /**
-     * Schedule the event to run only on Tuesdays.
+     * Set the days of the week the command should run on.
      *
+     * @param  array|mixed $days
+     *
+     * @return CronJobInterface
+     */
+    public function days($days)
+    {
+        $days = is_array($days) ? $days : func_get_args();
+
+        return $this->spliceIntoPosition(5, implode(',', $days));
+    }
+
+    /**
+     * Schedule the event to run only on Tuesdays.
      * @return CronJobInterface
      */
     public function tuesdays()
@@ -199,7 +231,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run only on Wednesdays.
-     *
      * @return CronJobInterface
      */
     public function wednesdays()
@@ -209,7 +240,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run only on Thursdays.
-     *
      * @return CronJobInterface
      */
     public function thursdays()
@@ -219,7 +249,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run only on Fridays.
-     *
      * @return CronJobInterface
      */
     public function fridays()
@@ -229,7 +258,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run only on Saturdays.
-     *
      * @return CronJobInterface
      */
     public function saturdays()
@@ -239,7 +267,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run only on Sundays.
-     *
      * @return CronJobInterface
      */
     public function sundays()
@@ -249,7 +276,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run weekly.
-     *
      * @return CronJobInterface
      */
     public function weekly()
@@ -260,8 +286,8 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run weekly on a given day and time.
      *
-     * @param  int  $day
-     * @param  string  $time
+     * @param  int    $day
+     * @param  string $time
      *
      * @return CronJobInterface
      */
@@ -274,7 +300,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run monthly.
-     *
      * @return CronJobInterface
      */
     public function monthly()
@@ -285,8 +310,8 @@ abstract class CronJob implements CronJobInterface
     /**
      * Schedule the event to run monthly on a given day and time.
      *
-     * @param int  $day
-     * @param string  $time
+     * @param int    $day
+     * @param string $time
      *
      * @return CronJobInterface
      */
@@ -299,7 +324,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run quarterly.
-     *
      * @return CronJobInterface
      */
     public function quarterly()
@@ -309,7 +333,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run yearly.
-     *
      * @return CronJobInterface
      */
     public function yearly()
@@ -319,7 +342,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run every minute.
-     *
      * @return CronJobInterface
      */
     public function everyMinute()
@@ -329,7 +351,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run every five minutes.
-     *
      * @return CronJobInterface
      */
     public function everyFiveMinutes()
@@ -339,7 +360,6 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run every ten minutes.
-     *
      * @return CronJobInterface
      */
     public function everyTenMinutes()
@@ -349,42 +369,10 @@ abstract class CronJob implements CronJobInterface
 
     /**
      * Schedule the event to run every thirty minutes.
-     *
      * @return CronJobInterface
      */
     public function everyThirtyMinutes()
     {
         return $this->setCronTimeExpression('0,30 * * * *');
-    }
-
-    /**
-     * Set the days of the week the command should run on.
-     *
-     * @param  array|mixed  $days
-     *
-     * @return CronJobInterface
-     */
-    public function days($days)
-    {
-        $days = is_array($days) ? $days : func_get_args();
-
-        return $this->spliceIntoPosition(5, implode(',', $days));
-    }
-
-    /**
-     * Splice the given value into the given position of the expression.
-     *
-     * @param  int  $position
-     * @param  string  $value
-     *
-     * @return CronJobInterface
-     */
-    protected function spliceIntoPosition($position, $value)
-    {
-        $segments = explode(' ', $this->cronTimeExpression);
-
-        $segments[$position - 1] = $value;
-
-        return $this->setCronTimeExpression(implode(' ', $segments));
     }
 }

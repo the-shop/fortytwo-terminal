@@ -6,6 +6,7 @@ use Framework\Base\Application\ApplicationAwareTrait;
 use Framework\Base\Request\RequestInterface;
 use Framework\Base\Router\DispatcherInterface;
 use Framework\Terminal\Input\TerminalInput;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * Class Dispatcher
@@ -30,36 +31,10 @@ class Dispatcher implements DispatcherInterface
     private $handler = null;
 
     /**
-     * @return array
-     */
-    public function getCommands(): array
-    {
-        return $this->commands;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCommandParameters(): array
-    {
-        return $this->commandParameters;
-    }
-
-    /**
-     * @param array $commands
-     *
-     * @return \Framework\Base\Router\DispatcherInterface
-     */
-    public function addCommands(array $commands): DispatcherInterface
-    {
-        $this->commands = array_merge($this->commands, $commands);
-
-        return $this;
-    }
-
-    /**
      * @param RequestInterface $request
+     *
      * @return $this
+     * @throws \InvalidArgumentException
      */
     public function parseRequest(RequestInterface $request)
     {
@@ -118,18 +93,27 @@ class Dispatcher implements DispatcherInterface
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getHandler()
+    public function getCommands(): array
+    {
+        return $this->commands;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHandler(): string
     {
         return $this->handler;
     }
 
     /**
      * @param string|null $fullyQualifiedClassName
-     * @return $this
+     *
+     * @return DispatcherInterface
      */
-    public function setHandler(string $fullyQualifiedClassName = null)
+    public function setHandler(string $fullyQualifiedClassName = null): DispatcherInterface
     {
         if (class_exists($fullyQualifiedClassName) === true) {
             $this->handler = $fullyQualifiedClassName;
@@ -141,8 +125,6 @@ class Dispatcher implements DispatcherInterface
     public function register()
     {
     }
-
-    //Terminal translation
 
     /**
      * @return array
@@ -160,12 +142,35 @@ class Dispatcher implements DispatcherInterface
         return $this->getCommandParameters();
     }
 
+    //Terminal translation
+
+    /**
+     * @return array
+     */
+    public function getCommandParameters(): array
+    {
+        return $this->commandParameters;
+    }
+
     /**
      * @param array $routesDefinition
-     * @return $this
+     *
+     * @return DispatcherInterface
      */
     public function addRoutes(array $routesDefinition = []): DispatcherInterface
     {
         return $this->addCommands($routesDefinition);
+    }
+
+    /**
+     * @param array $commands
+     *
+     * @return DispatcherInterface
+     */
+    public function addCommands(array $commands): DispatcherInterface
+    {
+        $this->commands = ArrayUtils::merge($this->commands, $commands);
+
+        return $this;
     }
 }

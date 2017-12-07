@@ -12,23 +12,25 @@ interface TerminalInputInterface extends ApplicationAwareInterface
 {
     /**
      * @param string $argument
+     *
      * @return TerminalInputInterface
      */
-    public function setInputCommand(string $argument);
+    public function setInputCommand(string $argument): TerminalInputInterface;
 
     /**
      * @return mixed
      */
-    public function getInputCommand();
+    public function getInputCommand(): string;
 
     /**
      * @param array $arguments
-     * @return mixed
+     *
+     * @return TerminalInputInterface
      */
-    public function setInputParameters(array $arguments = []);
+    public function setInputParameters(array $arguments = []): TerminalInputInterface;
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getInputParameters();
+    public function getInputParameters(): array;
 }
