@@ -11,8 +11,7 @@
     }
   ],
   "require": {
-    "the-shop/fortytwo-base": "^0.1.3",
-    "symfony/dotenv": "3.3.6"
+    "the-shop/fortytwo-base": "^0.1.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.3",
