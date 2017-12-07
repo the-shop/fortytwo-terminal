@@ -13,7 +13,7 @@ interface CommandHandlerInterface extends ApplicationAwareInterface
     /**
      * @param array $parameterValues
      *
-     * @return \Framework\Terminal\Commands\CommandHandlerInterface
+     * @return mixed
      */
     public function run(array $parameterValues = []);
 }

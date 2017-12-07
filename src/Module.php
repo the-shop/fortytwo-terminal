@@ -11,7 +11,7 @@ use Framework\Base\Module\BaseModule;
 class Module extends BaseModule
 {
     /**
-     * Bootstrap this module
+     * @inheritdoc
      */
     public function bootstrap()
     {
@@ -25,7 +25,7 @@ class Module extends BaseModule
 
         // Add commands to dispatcher
         $application->getDispatcher()
-            ->addRoutes($appConfig->getPathValue('commands'));
+                    ->addRoutes($appConfig->getPathValue('commands'));
 
         // Register listeners
         $listeners = $appConfig->getPathValue('listeners');

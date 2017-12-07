@@ -52,9 +52,11 @@ class ColorFormatter
 
     /**
      * Returns colored string
-     * @param $string
+     *
+     * @param      $string
      * @param null $foreground_color
      * @param null $background_color
+     *
      * @return string
      */
     public function getColoredString($string, $foreground_color = null, $background_color = null)

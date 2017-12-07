@@ -16,6 +16,9 @@ class Request extends BaseRequest implements TerminalRequestInterface
      */
     private $serverInformation = [];
 
+    /**
+     * @var string
+     */
     private $method = 'GET';
 
     /**
@@ -29,7 +32,7 @@ class Request extends BaseRequest implements TerminalRequestInterface
     /**
      * @param string $method
      *
-     * @return \Framework\Terminal\Request\TerminalRequestInterface
+     * @return TerminalRequestInterface
      */
     public function setMethod(string $method): TerminalRequestInterface
     {
@@ -48,7 +51,8 @@ class Request extends BaseRequest implements TerminalRequestInterface
 
     /**
      * @param array $serverInformationMap
-     * @return \Framework\Terminal\Request\TerminalRequestInterface
+     *
+     * @return TerminalRequestInterface
      */
     public function setServer(array $serverInformationMap = []): TerminalRequestInterface
     {
@@ -65,7 +69,7 @@ class Request extends BaseRequest implements TerminalRequestInterface
     /**
      * @param string $uri
      *
-     * @return \Framework\Base\Request\RequestInterface
+     * @return RequestInterface
      */
     public function setUri(string $uri): RequestInterface
     {

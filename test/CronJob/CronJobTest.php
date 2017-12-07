@@ -58,8 +58,8 @@ class CronJobTest extends UnitTest
 
     /**
      * Test cron jobs params being set correctly
-     *
      * @depends testAddCronJob
+     *
      * @param \Framework\Base\Application\ApplicationInterface $app
      */
     public function testCronJobSetters(ApplicationInterface $app)

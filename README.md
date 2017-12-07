@@ -1,4 +1,4 @@
-42 - Yoda
+42 - Terminal
 ====
 
 Terminal application for the _42_ framework

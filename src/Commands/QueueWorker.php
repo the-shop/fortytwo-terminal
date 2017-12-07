@@ -30,8 +30,8 @@ class QueueWorker implements CommandHandlerInterface
         $channel = $connection->channel();
 
         $queueNames = $this->getApplication()
-            ->getConfiguration()
-            ->getPathValue('queueNames');
+                           ->getConfiguration()
+                           ->getPathValue('queueNames');
 
         if (empty($queueNames) === true) {
             return 'No queueNames defined in configuration.';
@@ -53,12 +53,18 @@ class QueueWorker implements CommandHandlerInterface
                 $channel->basic_qos(null, 1, null);
 
                 $channel->basic_consume(
-                    $queueName, #queue
-                    '', #consumer tag - Identifier for the consumer, valid within the current channel. just string
-                    false, #no local - TRUE: the server will not send messages to the connection that published them
-                    false, #no ack - send a proper acknowledgment from the worker, once we're done with a task
-                    false, #exclusive - queues may only be accessed by the current connection
-                    false, #no wait - TRUE: the server will not respond to the method. The client should not wait for a reply method
+                    $queueName,
+                    #queue
+                    '',
+                    #consumer tag - Identifier for the consumer, valid within the current channel. just string
+                    false,
+                    #no local - TRUE: the server will not send messages to the connection that published them
+                    false,
+                    #no ack - send a proper acknowledgment from the worker, once we're done with a task
+                    false,
+                    #exclusive - queues may only be accessed by the current connection
+                    false,
+                    #no wait - TRUE: the server will not respond to the method. The client should not wait for a reply method
                     [$this, 'processQueue']    #callback - method that will receive the message
                 );
             }
@@ -70,11 +76,12 @@ class QueueWorker implements CommandHandlerInterface
 
     /**
      * @param $msg
+     *
      * @return $this
      */
     public function processQueue($msg)
     {
-        echo " [x] Received " .  $msg->body . "\n";
+        echo " [x] Received " . $msg->body . "\n";
         $taskInfo = json_decode($msg->body);
 
         // Execute task

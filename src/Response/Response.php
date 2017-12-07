@@ -10,4 +10,11 @@ use Framework\Base\Response\Response as BaseResponse;
  */
 class Response extends BaseResponse implements TerminalResponseInterface
 {
+    /**
+     * Response constructor.
+     */
+    public function __construct()
+    {
+        $this->setCode(0);
+    }
 }

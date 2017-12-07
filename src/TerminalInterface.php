@@ -19,7 +19,7 @@ interface TerminalInterface extends ApplicationInterface
     /**
      * @param CronJobInterface $cronJob
      *
-     * @return \Framework\Terminal\TerminalInterface
+     * @return TerminalInterface
      */
     public function registerCronJob(CronJobInterface $cronJob): TerminalInterface;
 
@@ -32,7 +32,7 @@ interface TerminalInterface extends ApplicationInterface
      * @param string $name
      * @param string $class
      *
-     * @return \Framework\Terminal\TerminalInterface
+     * @return TerminalInterface
      */
     public function registerSeeder(string $name, string $class): TerminalInterface;
 }

@@ -20,7 +20,7 @@ interface CronJobInterface extends ApplicationAwareInterface
     /**
      * @param string $expression
      *
-     * @return \Framework\Terminal\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function setCronTimeExpression(string $expression): CronJobInterface;
 
@@ -37,7 +37,7 @@ interface CronJobInterface extends ApplicationAwareInterface
     /**
      * @param array $args
      *
-     * @return \Framework\Terminal\Cron\CronJobInterface
+     * @return CronJobInterface
      */
     public function setArgs(array $args): CronJobInterface;
 

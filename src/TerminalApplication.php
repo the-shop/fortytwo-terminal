@@ -2,13 +2,15 @@
 
 namespace Framework\Terminal;
 
-use Framework\Base\Application\ApplicationConfiguration;
+use Framework\Base\Application\ApplicationConfigurationInterface;
 use Framework\Base\Application\BaseApplication;
+use Framework\Base\Response\ResponseInterface;
+use Framework\Terminal\Commands\CommandHandlerInterface;
+use Framework\Terminal\Cron\CronJobInterface;
 use Framework\Terminal\Output\TerminalOutput;
 use Framework\Terminal\Request\Request;
 use Framework\Terminal\Response\Response;
 use Framework\Terminal\Router\Dispatcher;
-use Framework\Terminal\Cron\CronJobInterface;
 
 /**
  * Class TerminalApplication
@@ -30,9 +32,9 @@ class TerminalApplication extends BaseApplication implements TerminalInterface
     /**
      * TerminalApplication constructor.
      *
-     * @param ApplicationConfiguration|null $applicationConfiguration
+     * @param ApplicationConfigurationInterface|null $applicationConfiguration
      */
-    public function __construct(ApplicationConfiguration $applicationConfiguration = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration = null)
     {
         $stream = fopen('php://stdout', 'w');
         $this->setRenderer(new TerminalOutput($stream));
@@ -42,6 +44,9 @@ class TerminalApplication extends BaseApplication implements TerminalInterface
         parent::__construct($applicationConfiguration);
     }
 
+    /**
+     * @return ResponseInterface
+     */
     public function handle()
     {
         /**
@@ -51,7 +56,7 @@ class TerminalApplication extends BaseApplication implements TerminalInterface
         $handlerPath = $dispatcher->getHandler();
 
         /**
-         * @var \Framework\Terminal\Commands\CommandHandlerInterface $handler
+         * @var CommandHandlerInterface $handler
          */
         $handler = new $handlerPath();
         $handler->setApplication($this);
@@ -79,7 +84,7 @@ class TerminalApplication extends BaseApplication implements TerminalInterface
     }
 
     /**
-     * @return CronJobInterface[]|[]
+     * @return CronJobInterface[]
      */
     public function getRegisteredCronJobs(): array
     {
@@ -87,9 +92,9 @@ class TerminalApplication extends BaseApplication implements TerminalInterface
     }
 
     /**
-     * @param \Framework\Terminal\Cron\CronJobInterface $cronJob
+     * @param CronJobInterface $cronJob
      *
-     * @return \Framework\Terminal\TerminalInterface
+     * @return TerminalInterface
      */
     public function registerCronJob(CronJobInterface $cronJob): TerminalInterface
     {
@@ -109,7 +114,8 @@ class TerminalApplication extends BaseApplication implements TerminalInterface
     /**
      * @param string $seederName
      * @param string $fullyQualifiedClassPath
-     * @return \Framework\Terminal\TerminalInterface
+     *
+     * @return TerminalInterface
      */
     public function registerSeeder(string $seederName, string $fullyQualifiedClassPath): TerminalInterface
     {

@@ -22,12 +22,14 @@ class DatabaseSeedersHandler implements CommandHandlerInterface
         $seeders = $this->getSeeders();
         $seederName = $paramValues['seederName'];
 
-        if  (class_exists($seeders[$seederName]) === true) {
+        if (class_exists($seeders[$seederName]) === true) {
             /** @var \Framework\Terminal\Seeder\SeederInterface $seeder */
             $seeder = new $seeders[$seederName];
+
             return $seeder->setApplication($this->getApplication())
                           ->seed();
         }
+
         return null;
     }
 
@@ -36,6 +38,7 @@ class DatabaseSeedersHandler implements CommandHandlerInterface
      */
     public function getSeeders(): array
     {
-        return $this->getApplication()->getRegisteredSeeders();
+        return $this->getApplication()
+                    ->getRegisteredSeeders();
     }
 }

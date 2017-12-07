@@ -12,6 +12,7 @@ use Framework\Base\Response\ResponseInterface;
 class TerminalOutput implements TerminalOutputInterface
 {
     use ApplicationAwareTrait;
+
     /**
      * @var array
      */
@@ -29,7 +30,10 @@ class TerminalOutput implements TerminalOutputInterface
 
     /**
      * TerminalOutput constructor.
+     *
      * @param $stream
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct($stream)
     {
@@ -37,37 +41,23 @@ class TerminalOutput implements TerminalOutputInterface
             throw new \InvalidArgumentException('The TerminalOutput class needs a stream as its first argument.', 404);
         }
 
-        $this->setColorFormatter(new ColorFormatter());
-        $this->setOutputStream($stream);
-    }
-
-    /**
-     * @param array $messages
-     * @return $this
-     */
-    public function setOutputMessages(array $messages = [])
-    {
-        $this->outputMessages = $messages;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOutputMessages()
-    {
-        return $this->outputMessages;
+        $this->setColorFormatter(new ColorFormatter())
+             ->setOutputStream($stream);
     }
 
     /**
      * @param ResponseInterface $response
-     * @return $this
+     *
+     * @return TerminalOutputInterface
      */
-    public function render(ResponseInterface $response)
+    public function render(ResponseInterface $response): TerminalOutputInterface
     {
         $responseCode = $response->getCode();
         $responseBody = $response->getBody();
+
+        if (is_array($responseBody) === true) {
+            $responseBody = $this->arrayToString($responseBody);
+        }
 
         $foregroundColor = 'green';
         $backgroundColor = 'black';
@@ -75,7 +65,7 @@ class TerminalOutput implements TerminalOutputInterface
 
         $statusMessage = 'Status code: ' . $responseCode;
 
-        if ($responseCode === 200) {
+        if ($responseCode === 0) {
             $statusMessage .= ' command DONE!';
             $responseMessage =
                 $colorFormatter->getColoredString(
@@ -83,7 +73,7 @@ class TerminalOutput implements TerminalOutputInterface
                     $foregroundColor,
                     $backgroundColor
                 )
-                . json_encode($responseBody);
+                . $responseBody;
         } else {
             $statusMessage .= ' command FAILED!';
             $foregroundColor = 'red';
@@ -91,7 +81,7 @@ class TerminalOutput implements TerminalOutputInterface
             $responseMessage =
                 $colorFormatter->getColoredString(
                     'Response: '
-                    . json_encode($responseBody),
+                    . $responseBody,
                     $foregroundColor,
                     $backgroundColor
                 );
@@ -103,20 +93,65 @@ class TerminalOutput implements TerminalOutputInterface
             $backgroundColor
         );
 
-        $this->setOutputMessages([
-            $codeMsg,
-            $responseMessage,
-        ]);
+        $this->setOutputMessages(
+            [
+                $codeMsg,
+                $responseMessage,
+            ]
+        );
 
         $this->outputMessages();
 
         return $this;
     }
 
+    private function arrayToString(array $array)
+    {
+        $output = '';
+
+        foreach ($array as $key => $value) {
+            if (is_int($key) === false) {
+                $output .= "$key => ";
+            }
+
+            if (is_array($value) === true) {
+                $output .= $this->arrayToString($value);
+            } elseif (is_bool($value) === true) {
+                $output .= $value ? "true\n" : "false\n";
+            } elseif (is_null($value) === true) {
+                $output .= "null\n";
+            } else {
+                $output .= "$value\n";
+            }
+        }
+
+        return $output;
+    }
+
     /**
-     * @return $this
+     * @return ColorFormatter
      */
-    public function outputMessages()
+    public function getColorFormatter()
+    {
+        return $this->colorFormatter;
+    }
+
+    /**
+     * @param ColorFormatter $colorFormatter
+     *
+     * @return TerminalOutputInterface
+     */
+    public function setColorFormatter(ColorFormatter $colorFormatter): TerminalOutputInterface
+    {
+        $this->colorFormatter = $colorFormatter;
+
+        return $this;
+    }
+
+    /**
+     * @return TerminalOutputInterface
+     */
+    public function outputMessages(): TerminalOutputInterface
     {
         $messages = $this->getOutputMessages();
 
@@ -130,14 +165,39 @@ class TerminalOutput implements TerminalOutputInterface
     }
 
     /**
-     * @param string $message
-     * @param bool $newline
-     * @return $this
+     * @return array
      */
-    public function writeOutput(string $message, bool $newline = false)
+    public function getOutputMessages(): array
     {
-        if (fwrite($this->stream, $message) === false ||
-            ($newline && (fwrite($this->stream, PHP_EOL))) === false
+        return $this->outputMessages;
+    }
+
+    /**
+     * @param array $messages
+     *
+     * @return TerminalOutputInterface
+     */
+    public function setOutputMessages(array $messages = []): TerminalOutputInterface
+    {
+        $this->outputMessages = $messages;
+
+        return $this;
+    }
+
+    /**
+     * @param string $message
+     * @param bool   $newline
+     *
+     * @return TerminalOutputInterface
+     * @throws \RuntimeException
+     */
+    public function writeOutput(string $message, bool $newline = false): TerminalOutputInterface
+    {
+        if (fwrite($this->stream, $message) === false
+            || (
+                   $newline
+                   && (fwrite($this->stream, PHP_EOL))
+               ) === false
         ) {
             throw new \RuntimeException('Unable to write output.');
         }
@@ -146,22 +206,15 @@ class TerminalOutput implements TerminalOutputInterface
     }
 
     /**
-     * @param $colorFormatter
-     * @return $this
+     * @return TerminalOutputInterface
      */
-    public function setColorFormatter($colorFormatter)
+    private function closeOutputStream(): TerminalOutputInterface
     {
-        $this->colorFormatter = $colorFormatter;
+        $stream = $this->getOutputStream();
+
+        fclose($stream);
 
         return $this;
-    }
-
-    /**
-     * @return ColorFormatter
-     */
-    public function getColorFormatter()
-    {
-        return $this->colorFormatter;
     }
 
     /**
@@ -174,23 +227,12 @@ class TerminalOutput implements TerminalOutputInterface
 
     /**
      * @param $stream
-     * @return $this
+     *
+     * @return TerminalOutputInterface
      */
-    private function setOutputStream($stream)
+    public function setOutputStream($stream): TerminalOutputInterface
     {
         $this->stream = $stream;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    private function closeOutputStream()
-    {
-        $stream = $this->getOutputStream();
-
-        fclose($stream);
 
         return $this;
     }

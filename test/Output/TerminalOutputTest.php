@@ -2,11 +2,11 @@
 
 namespace Framework\Terminal\Test\Output;
 
+use Framework\Terminal\Output\ColorFormatter;
+use Framework\Terminal\Output\TerminalOutput;
 use Framework\Terminal\Response\Response;
 use Framework\Terminal\Test\UnitTest;
 use InvalidArgumentException;
-use Framework\Terminal\Output\ColorFormatter;
-use Framework\Terminal\Output\TerminalOutput;
 
 /**
  * Class TerminalOutputTest
@@ -37,7 +37,6 @@ class TerminalOutputTest extends UnitTest
         $outputHandler = new TerminalOutput($stream);
 
         $response = new Response();
-        $response->setCode(200);
         $response->setBody('test');
 
         $outputHandler->render($response);
@@ -55,7 +54,7 @@ class TerminalOutputTest extends UnitTest
                 . "\033["
                 . $backgroundColors['black']
                 . "m"
-                . "Status code: 200 command DONE!"
+                . "Status code: 0 command DONE!"
                 . "\033[0m",
                 "\033["
                 . $foregroundColors['green']
@@ -64,12 +63,20 @@ class TerminalOutputTest extends UnitTest
                 . "m"
                 . "Response: "
                 . "\033[0m"
-                . '"test"'
+                . 'test'
             ],
             $outputHandler->getOutputMessages()
         );
 
         $this->clearOutputFile();
+    }
+
+    /**
+     * Clear output messages from file
+     */
+    private function clearOutputFile()
+    {
+        file_put_contents(__DIR__ . '/outputMessages.txt', '');
     }
 
     /**
@@ -82,10 +89,12 @@ class TerminalOutputTest extends UnitTest
 
         $response = new Response();
         $response->setCode(403);
-        $response->setBody([
-            'error' => true,
-            'errors' => 'Test Exception message.'
-        ]);
+        $response->setBody(
+            [
+                'error' => true,
+                'errors' => 'Test Exception message.'
+            ]
+        );
 
         $outputHandler->render($response);
 
@@ -110,20 +119,12 @@ class TerminalOutputTest extends UnitTest
                 . "\033[" . $backgroundColors['light_gray']
                 . "m"
                 . "Response: "
-                . json_encode($response->getBody())
+                . "error => true\nerrors => Test Exception message.\n"
                 . "\033[0m"
             ],
             $outputHandler->getOutputMessages()
         );
 
         $this->clearOutputFile();
-    }
-
-    /**
-     * Clear output messages from file
-     */
-    private function clearOutputFile()
-    {
-        file_put_contents(__DIR__ . '/outputMessages.txt', '');
     }
 }
