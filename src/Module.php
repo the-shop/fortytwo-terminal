@@ -13,12 +13,18 @@ class Module extends BaseModule
     /**
      * @inheritdoc
      */
-    public function bootstrap()
+    public function loadConfig()
     {
         // Let's read all files from module config folder and set to Configuration
         $configDirPath = realpath(dirname(__DIR__)) . '/config/';
         $this->setModuleConfiguration($configDirPath);
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function bootstrap()
+    {
         /** @var \Framework\Terminal\TerminalInterface $application */
         $application = $this->getApplication();
         $appConfig = $application->getConfiguration();
@@ -26,14 +32,6 @@ class Module extends BaseModule
         // Add commands to dispatcher
         $application->getDispatcher()
                     ->addRoutes($appConfig->getPathValue('commands'));
-
-        // Register listeners
-        $listeners = $appConfig->getPathValue('listeners');
-        foreach ($listeners as $event => $arrayHandlers) {
-            foreach ($arrayHandlers as $handlerClass) {
-                $this->getApplication()->listen($event, $handlerClass);
-            }
-        }
 
         // Register cron jobs
         $cronJobs = $appConfig->getPathValue('cronJobs');
