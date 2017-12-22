@@ -20,7 +20,7 @@ class DatabaseSeedersHandler implements CommandHandlerInterface
     public function run(array $paramValues = [])
     {
         $seeders = $this->getSeeders();
-        $seederName = $paramValues['seederName'];
+        $seederName = $paramValues[0];
 
         if (class_exists($seeders[$seederName]) === true) {
             /** @var \Framework\Terminal\Seeder\SeederInterface $seeder */
